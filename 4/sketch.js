@@ -1,9 +1,8 @@
 const svg_mode = false;
 
-let squares;
-let squares_top;
+let squares = []
 
-function draw1(startx, starty, dim, angle, arr, arrtop, minus1 = 1, minus2 = 2, mode) {
+function draw1(startx, starty, dim, angle, mode) {
   let calc_rot = (x, y) => {
     let new_x = x * cos(radians(angle)) - y * sin(radians(angle));
     let new_y = y * cos(radians(angle)) + x * sin(radians(angle));
@@ -17,16 +16,10 @@ function draw1(startx, starty, dim, angle, arr, arrtop, minus1 = 1, minus2 = 2, 
     let c3 = calc_rot(dim + startx, i + starty);
     let c4 = calc_rot(i + startx, dim + starty);
 
-    if (mode !== 1) arr.push(new Square2(c1[0], c1[1], random(1, 8), i, minus1, minus2));
-    if (mode !== 1) arr.push(new Square2(c2[0], c2[1], random(1, 8), i, minus1, minus2));
-    arr.push(new Square2(c3[0], c3[1], random(1, 8), i, minus1, minus2));
-    arr.push(new Square2(c4[0], c4[1], random(1, 8), i, minus1, minus2));
-
-    // top
-    if (arrtop !== false) {
-      if (mode !== 1) arrtop.push(new Square(c2[0], c2[1], random(1, 8), i, minus1, minus2));
-      if (mode !== 1) arrtop.push(new Square(c3[0], c3[1], random(1, 8), i, minus1, minus2));
-    }
+    squares.push(new Square(c1[0], c1[1], random(1, 8), i));
+    squares.push(new Square(c2[0], c2[1], random(1, 8), i));
+    squares.push(new Square(c3[0], c3[1], random(1, 8), i));
+    squares.push(new Square(c4[0], c4[1], random(1, 8), i));
   }
 }
 
@@ -38,32 +31,38 @@ function setup() {
 
   background(27)
 
-  let dim = 350;
-  squares = []
-  squares_top = []
+  let dim = 300;
+  let intersect = 173;
 
-  draw1(0, 0, dim, 0, squares, squares_top, 0.8, 1.4)
+  translate(width / 2, 550)
+  noStroke();
+  fill(235, 255);
+
+  draw1(0, 0, dim, 0)
+  draw1(- intersect, dim - intersect, dim, -0)
+  draw1(- intersect / 2, dim - intersect / 2, dim, 0)
+
+  draw1(0, 0, dim, 90)
+  draw1(- intersect, dim - intersect, dim, 90)
+  draw1(- intersect / 2, dim - intersect / 2, dim, 90)
+  
+  draw1(0, 0, dim, 180)
+  draw1(- intersect, dim - intersect, dim, 180)
+  draw1(- intersect / 2, dim - intersect / 2, dim, 180)
+  
+  draw1(0, 0, dim, 270) 
+  draw1(- intersect, dim - intersect, dim, 270)
+  draw1(- intersect / 2, dim - intersect / 2, dim, 270)
+
+  draw1(0, 0, dim / 6, 0)
+
+  draw1( 2, - 512, 82, 0)
+
+  draw1( - 514, - 172, 86, 0)
 }
 
 function draw() {
   // squares animation
-
-  squares_top.map((square, i) => {
-    let mult;
-
-    if (i % 2 === 0)
-      mult = 1;
-    else
-      mult = -1;
-
-    let gravity = createVector(mult * 0.08, 0);
-    let weight = p5.Vector.mult(gravity, square.mass);
-
-    square.applyForce(weight);
-    square.update();
-    square.stop();
-    square.show(45);
-  })
 
   for (let square of squares) {
     let gravity = createVector(0.08, 0.08);
@@ -72,7 +71,7 @@ function draw() {
     square.applyForce(weight);
     square.update();
     square.stop();
-    square.show(45);
+    square.show();
   }
 }
 

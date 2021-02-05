@@ -1,5 +1,5 @@
 class Square {
-  constructor(x, y, m, i, minus1 = 1, minus2 = 2) {
+  constructor(x, y, m, i) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
@@ -11,9 +11,6 @@ class Square {
     this.stopMotion = false;
 
     this.c = 0;
-
-    this.minus1 = minus1;
-    this.minus2 = minus2;
   }
 
   applyForce(force) {
@@ -34,16 +31,16 @@ class Square {
 
     this.vel.limit(this.maxVel)
     
-    this.opacity -= random(this.minus1, this.minus2);
+    this.opacity -= random(1, 2);
   }
 
-  show(angle = 45) {
+  show() {
     let isonometry_show = () => {
       // go to isonometry mode
       push();
-      translate(width / 2, 100);
+      translate(width / 2, 350);
       scale(1, 0.5);
-      rotate(angle * Math.PI / 180);
+      rotate(45 * Math.PI / 180);
 
       noStroke();
       fill(235, this.opacity)
